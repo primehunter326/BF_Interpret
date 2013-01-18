@@ -12,34 +12,24 @@ int main(int argc, char *argv[]){
 		//No file but are there brainfuck commands being passed to the program?
 		if(argc > 1){
 			//Yes there are! Do stuff with them!
+			int i=1;
+			for(; i < argc; i++){
+				translateBF(&thing,argv[i]);
+			}
 		}else{
 			//No arguments. Begin interactive interpreter here or do nothing
+			//TODO: Make interactive bit (taking input, making sure to grab input if a [ shows up until a ] does. )
+			interpreter(&thing);
 		}
+	}else{
+		//Read the file here and translate it.
+		char * commands = readFromFile(fp);
+		//Now do it.
+		translateBF(&thing,commands);
 	}
 
-	//Tests
-	incrementDataPointer(&thing);
-	incrementCurrentByte(&thing);
-	decrementDataPointer(&thing);
-	decrementDataPointer(&thing);
-	
-	printf("%i\n",thing.tape[thing.dataPointer]);
-
-	int i;
-	for(i=0; i < 65; i++){
-		incrementCurrentByte(&thing);	
-	}
-	
-
-	outputByte(&thing);
-	inputByte(&thing);
-
-	printf("%c\n",thing.tape[thing.dataPointer]);
-	printf("%i\n",thing.dataPointer );
-	printf("%i\n",thing.currentSize );
-
-	printf("\nCompiled\n\n");
-
+	//Tests by doing Hellow World.
+	//translateBF(&thing,"++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.");
 	//Free memory
 	freeBFState(&thing);
 

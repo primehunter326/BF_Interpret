@@ -127,7 +127,7 @@ void interpreter(BFState * interp){
 	int size = 2000;
 	char * buffer = (char *) malloc(size);
 	char incomingChar = ' ';
-	int curChar;
+	int curChar=0;
 	int braceCheck = 0;
     int print = 0;
 	printf(">");
@@ -144,6 +144,7 @@ void interpreter(BFState * interp){
                 print = 1;
             }
             curChar++;
+            
 			if(curChar > size-1){
 				//We ran out of room...
 				puts("Command too long! Please break your statements up or use a file");
@@ -157,6 +158,7 @@ void interpreter(BFState * interp){
 		        if (print) {
                     printTape(interp);
                     print = 0;
+                    curChar =0;
                 }
                 else {
         	        translateBF(interp,buffer);

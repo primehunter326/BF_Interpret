@@ -46,7 +46,7 @@ void printTape(BFState * interp){
     int i = 0;
     int wrapLine = 0;
     for (i=0;i<=size;i++){
-        printf("%2X ",interp->tape[i]);
+        printf("%02X ",interp->tape[i]);
         if (i > wrapLine){
             printf("\n");
             wrapLine = 0;
@@ -54,6 +54,7 @@ void printTape(BFState * interp){
         else
             wrapLine++;
     }
+    printf("\n");
 }
 
 //Takes the instructions and current instructionPointer value, begins the search and
@@ -132,8 +133,7 @@ void interpreter(BFState * interp){
 	printf(">");
 
 	while(incomingChar != quitChar){
-		curChar=0;
-		while((incomingChar =getchar()) != '\n' && incomingChar != quitChar){
+		if((incomingChar =getchar()) != '\n'){
 			buffer[curChar] = incomingChar;
 			if(incomingChar == '['){
 				braceCheck++;
@@ -152,19 +152,25 @@ void interpreter(BFState * interp){
 			}
 		}
 		//Do we have any loose braces?
-		if(braceCheck == 0){
-		    if (print) {
-                printTape(interp);
-                print = 0;
+		else { 
+            if(braceCheck == 0){
+		        if (print) {
+                    printTape(interp);
+                    print = 0;
+                }
+                else {
+        	        translateBF(interp,buffer);
+                    curChar = 0;
+                    incomingChar = '0';
+                }
             }
-        	translateBF(interp,buffer);
+		    else{
+			    puts("Please close your braces, your BF statement has not been executed.");
+		    }
+		    //Clear the buffer.
+		    memset(buffer,0,size);
+	        printf(">");
         }
-		else{
-			puts("Please close your braces, your BF statement has not been executed.");
-		}
-		//Clear the buffer.
-		memset(buffer,0,size);
-		printf("\n>");
 	}
 }
 
